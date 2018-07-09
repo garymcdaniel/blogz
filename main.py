@@ -14,17 +14,17 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    body = db.column(db.String(1000))
+    body = db.Column(db.String(120))
 
     def __init__(self, title, body):
         self.title = title
         self.body = body
         
-@app.route('/', methods=['POST', 'GET'])
-def index():
+@app.route('/blog', methods=['POST', 'GET'])
+def blog():
 
     if request.method == 'POST':
-        task_name = request.form['task']
+        task_name = request.form['blog']
         new_task = Task(task_name)
         db.session.add(new_task)
         db.session.commit()
@@ -35,8 +35,8 @@ def index():
         tasks=tasks, completed_tasks=completed_tasks)
 
 
-@app.route('/delete-task', methods=['POST'])
-def delete_task():
+@app.route('/newpost', methods=['POST', 'GET'])
+def newpost():
 
     task_id = int(request.form['task-id'])
     task = Task.query.get(task_id)
