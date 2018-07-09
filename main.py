@@ -47,5 +47,7 @@ def newpost():
     return redirect('/blog')
 
 
+#making a change
+
 if __name__ == '__main__':
     app.run()
