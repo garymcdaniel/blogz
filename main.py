@@ -32,7 +32,7 @@ def blog():
 
     tasks = Task.query.filter_by(completed=False).all()
     completed_tasks = Task.query.filter_by(completed=True).all()
-    return render_template('todos.html',title="Get It Done!", 
+    return render_template('blog.html',title="Build a Blog", 
         tasks=tasks, completed_tasks=completed_tasks)
 
 # You're able to submit a new post at the /newpost route. After submitting a new post, 
