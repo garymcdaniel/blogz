@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Build a Blog</h1>
+    <h1>Build a Blog</h1>
+    <form method='post'>
+        <label>
+            New Blog: 
+            <input type="text" name='task' />
+        </label>
+        <input type="submit" value='Add Task' />
+    </form>
 
+    <hr />
 
-<form action="/login" method="post">
-     
-    <table>
-        <tr>
-            <td><label for="email">Email</label></td>
-            <td>
-                <input name="email" type="email" value="{{ email }}">
-            </td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td>
-                <input name="password" type="password">
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Login">
-</form>
+    {% if tasks|length == 0 %}
+    <p>No tasks yet</p>
+    {% else %}
+
+        <ul>
+            {% for task in tasks %}
+            <li>{{task}}</li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
 {% endblock %}

@@ -1,26 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Get It Done!</h1>
-    <form method='post'>
-        <label>
-            New Task: 
-            <input type="text" name='task' />
-        </label>
-        <input type="submit" value='Add Task' />
-    </form>
+<h1>Add a Blog Entry</h1>
 
-    <hr />
-
-    {% if tasks|length == 0 %}
-    <p>No tasks yet</p>
-    {% else %}
-
-        <ul>
-            {% for task in tasks %}
-            <li>{{task}}</li>
-            {% endfor %}
-        </ul>
-
-    {% endif %}
+<!--it looks like that this page should only have the blogs posting and not submitting forms-->
+<form action="/blog" method="post">
+     
+    <table>
+        <tr>
+            <td><label for="Title for your new blog:">Title for your new blog:</label></td>
+            <td>
+                <input name="Title for your new blog:" type="Title for your new blog:" value="{{ Title for your new blog: }}">
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Your new blog:">Your new blog:</label></td>
+            <td>
+                <input name="Your new blog:" type="Your new blog:">
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Add Entry">
+</form>
 {% endblock %}

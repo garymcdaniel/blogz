@@ -38,14 +38,15 @@ def blog():
 # You're able to submit a new post at the /newpost route. After submitting a new post, 
 # your app displays the main blog page.
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
 
-    task_id = int(request.form['task_id'])
-    task = Task.query.get(task_id)
-    task.completed = True
-    db.session.add(task)
-    db.session.commit()
+    if request.method == 'POST':
+        task_id = int(request.form['task_id'])
+        task = Task.query.get(task_id)
+        task.completed = True
+        db.session.add(task)
+        b.session.commit()
 
     return redirect('/blog')
 
