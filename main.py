@@ -20,20 +20,18 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
+@app.route('/', methods=['GET'])
+def index():
+
+    return render_template('newpost.html')
+
 # The /blog route displays all the blog posts.
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
-    if request.method == 'POST':
-        task_name = request.form['blog']
-        new_task = Task(task_name)
-        db.session.add(new_task)
-        db.session.commit()
+    blogs = Blog.query.all()
 
-    tasks = Task.query.filter_by(completed=False).all()
-    completed_tasks = Task.query.filter_by(completed=True).all()
-    return render_template('blog.html',title="Build a Blog", 
-        tasks=tasks, completed_tasks=completed_tasks)
+    return render_template('blog.html', title="Build a Blog", blogs=blogs)
 
 # You're able to submit a new post at the /newpost route. After submitting a new post, 
 # your app displays the main blog page.
@@ -41,16 +39,23 @@ def blog():
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
 
-    if request.method == 'POST':
-        task_id = int(request.form['task_id'])
-        task = Task.query.get(task_id)
-        task.completed = True
-        db.session.add(task)
-        b.session.commit()
 
-    return redirect('/blog')
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        new_blog = Blog(title, body)
+        db.session.add(new_blog)
+        db.session.commit()
+
+        return redirect('/blog')
+    
+    else:
+        return render_template('newpost.html')
+
 
 
 
 if __name__ == '__main__':
     app.run()
+
+    
