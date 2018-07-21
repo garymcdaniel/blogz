@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:password@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = "#someSecretString"
@@ -20,10 +20,34 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120))
+    password = db.Column(db.String(120))
+    blogs = db.Column
+
+
 @app.route('/', methods=['GET'])
 def index():
 
     return render_template('newpost.html')
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+
+    return render_template('newpost.html', title="Add a Blog Entry", newpost=newpost)
+
+@app.route('/index', methods=['POST', 'GET'])
+def login():
+
+@app.route('/logout', methods=['POST'])
+def login():
+
+    return render_template('blog.html', title="Build a Blog", blogs=blogs)
 
 # The /blog route displays all the blog posts.
 @app.route('/blog', methods=['POST', 'GET'])
