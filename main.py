@@ -15,37 +15,67 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.String(120))
+    #owner_id = db.Column(db.Integer, foreign_key=True)
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, owner_id):
         self.title = title
         self.body = body
+        self.owner_id = owner_id
 
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120))
     password = db.Column(db.String(120))
-    blogs = db.Column
+    
 
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        
 
 @app.route('/', methods=['GET'])
 def index():
 
     return render_template('newpost.html')
+#@app.route('/index', methods=['POST', 'GET'])
+#def index():
+
+    #return render_template('newpost.html')
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+
+    return render_template('newpost.html', title="Add a Blog Entry", newpost=newpost)
+
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 
-    return render_template('newpost.html', title="Add a Blog Entry", newpost=newpost)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if username and user.password == password:
+            session['username'] = username
+            return redirect('/newpost')
+        elif username and user.password != password:
+            flash('User password is incorrect')
+            return render_template('login.html')
+        elif username and user.password != username:
+            flash('Username does not exist')
+            return render_template('login.html')
+        else:
+            return render_template('signup.html')
 
-@app.route('/index', methods=['POST', 'GET'])
-def login():
-
-@app.route('/logout', methods=['POST'])
-def login():
+@app.route('/logout', methods=['GET'])
+def logout():
 
     return render_template('blog.html', title="Build a Blog", blogs=blogs)
 
