@@ -15,7 +15,7 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.String(120))
-    #owner_id = db.Column(db.Integer, foreign_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self, title, body, owner_id):
         self.title = title
@@ -27,11 +27,13 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120))
     password = db.Column(db.String(120))
+    blogs = db.Column(db.String(120))
     
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, blogs):
         self.username = username
         self.password = password
+        self.blogs = blogs
         
 
 @app.route('/', methods=['GET'])
@@ -77,15 +79,15 @@ def login():
 @app.route('/logout', methods=['GET'])
 def logout():
 
-    return render_template('blog.html', title="Build a Blog", blogs=blogs)
+    return render_template('blog.html', title="Build a Blog", blog=blog)
 
 # The /blog route displays all the blog posts.
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
-    blogs = Blog.query.all()
+    blog = Blog.query.all()
 
-    return render_template('blog.html', title="Build a Blog", blogs=blogs)
+    return render_template('blog.html', title="Build a Blog", blog=blog)
 
 # You're able to submit a new post at the /newpost route. After submitting a new post, 
 # your app displays the main blog page.
