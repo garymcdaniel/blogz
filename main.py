@@ -39,11 +39,8 @@ class User(db.Model):
 @app.route('/', methods=['GET'])
 def index():
 
-    return render_template('newpost.html')
-#@app.route('/index', methods=['POST', 'GET'])
-#def index():
+    return render_template('login.html')
 
-    #return render_template('newpost.html')
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -59,7 +56,6 @@ def signup():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -78,8 +74,9 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-
-    return render_template('blog.html', title="Build a Blog", blog=blog)
+    #del session['username']
+    return redirect('/')
+    
 
 # The /blog route displays all the blog posts.
 @app.route('/blog', methods=['POST', 'GET'])
