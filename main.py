@@ -8,7 +8,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = "#someSecretString"
 
-#setup a Blog class
 
 class Blog(db.Model):
 
@@ -27,13 +26,19 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120))
     password = db.Column(db.String(120))
-    blogs = db.Column(db.String(120))
+    blogs = db.relationship('Blog', backref='user', lazy=True)
     
 
     def __init__(self, username, password, blogs):
         self.username = username
         self.password = password
         self.blogs = blogs
+
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'blog', 'index', 'signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
         
 
 @app.route('/', methods=['GET'])
@@ -48,9 +53,9 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-
-
-    return render_template('newpost.html', title="Add a Blog Entry", newpost=newpost)
+        if username and user.password and user.verify == password:
+            session['username'] = username
+            return render_template('newpost.html', title="Add a Blog Entry", newpost=newpost)
 
 
 
