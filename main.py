@@ -44,7 +44,8 @@ def require_login():
 @app.route('/', methods=['GET'])
 def index():
 
-    return render_template('login.html')
+        return render_template('login.html')
+
 
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -67,6 +68,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if username and user.password == password:
             session['username'] = username
+            flash("Logged in")
             return redirect('/newpost')
         elif username and user.password != password:
             flash('User password is incorrect')
@@ -91,8 +93,7 @@ def blog():
 
     return render_template('blog.html', title="Build a Blog", blog=blog)
 
-# You're able to submit a new post at the /newpost route. After submitting a new post, 
-# your app displays the main blog page.
+# You're able to submit a new post at the /newpost route. 
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
@@ -110,7 +111,21 @@ def newpost():
     else:
         return render_template('newpost.html')
 
+@app.route('/singleuser', methods=['POST', 'GET'])
+def singleuser():
 
+
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        new_blog = Blog(title, body)
+        db.session.add(new_blog)
+        db.session.commit()
+
+        return redirect('/blog')
+    
+    else:
+        return render_template('singleuser.html')
 
 
 if __name__ == '__main__':
